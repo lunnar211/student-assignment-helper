@@ -31,6 +31,15 @@ export const metadata: Metadata = {
 
 const TOOLS = [
   {
+    href: "/all-in-one",
+    icon: Wand2,
+    title: "All-in-One Fix",
+    description:
+      "Paste once or upload a PDF — grammar, AI check, paraphrase, humanize and auto-fix, all in one click.",
+    gradient: "from-fuchsia-500 to-violet-600",
+    badge: "NEW",
+  },
+  {
     href: "/paraphraser",
     icon: RefreshCw,
     title: "Paraphraser",
@@ -145,7 +154,7 @@ const GUIDES = [
 const FAQS = [
   {
     q: "Is it really free?",
-    a: "Yes. All six tools are completely free to use — no credits, no daily limits, no trial that runs out, and no card details. We keep it free by using efficient AI providers and keeping the site simple.",
+    a: "Yes. All seven tools are completely free to use — no credits, no daily limits, no trial that runs out, and no card details. We keep it free by using efficient AI providers and keeping the site simple.",
   },
   {
     q: "Is my text stored anywhere?",
@@ -199,7 +208,7 @@ export default function Home() {
             <Reveal delay={0.16}>
               <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-500 sm:text-lg">
                 Paraphrase, humanize, write your SOP, check grammar and AI
-                content — six free tools built for students, in one place.
+                content — seven free tools built for students, in one place.
               </p>
             </Reveal>
             <Reveal delay={0.24}>
@@ -222,7 +231,7 @@ export default function Home() {
             <Reveal delay={0.32}>
               <p className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-slate-500">
                 <span className="inline-flex items-center gap-1.5">
-                  <Check className="h-4 w-4 text-emerald-500" /> 6 tools
+                  <Check className="h-4 w-4 text-emerald-500" /> 7 tools
                 </span>
                 <span className="text-slate-300">·</span>
                 <span className="inline-flex items-center gap-1.5">
@@ -280,7 +289,7 @@ export default function Home() {
         <Reveal>
           <div className="text-center">
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-              Six tools, one place
+              Seven tools, one place
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-slate-500">
               Everything you need to go from a rough draft to a submission-ready
@@ -300,8 +309,13 @@ export default function Home() {
                 >
                   <tool.icon className="h-6 w-6" />
                 </span>
-                <h3 className="mt-4 text-lg font-semibold text-slate-900">
+                <h3 className="mt-4 flex items-center gap-2 text-lg font-semibold text-slate-900">
                   {tool.title}
+                  {"badge" in tool && tool.badge && (
+                    <span className="rounded-full bg-fuchsia-100 px-2 py-0.5 text-[10px] font-bold tracking-wide text-fuchsia-700">
+                      {tool.badge}
+                    </span>
+                  )}
                 </h3>
                 <p className="mt-1.5 flex-1 text-sm leading-relaxed text-slate-500">
                   {tool.description}

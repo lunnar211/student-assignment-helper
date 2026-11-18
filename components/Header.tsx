@@ -6,7 +6,14 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { GraduationCap, Menu, X, Sparkles } from "lucide-react";
 
-const TOOLS = [
+interface NavLink {
+  href: string;
+  label: string;
+  badge?: string;
+}
+
+const TOOLS: NavLink[] = [
+  { href: "/all-in-one", label: "All-in-One", badge: "NEW" },
   { href: "/paraphraser", label: "Paraphraser" },
   { href: "/humanizer", label: "Humanizer" },
   { href: "/sop-writer", label: "SOP Writer" },
@@ -15,7 +22,7 @@ const TOOLS = [
   { href: "/grammar-checker", label: "Grammar" },
 ];
 
-const PAGES = [
+const PAGES: NavLink[] = [
   { href: "/guides", label: "Guides" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -50,13 +57,18 @@ export default function Header() {
             <Link
               key={l.href}
               href={l.href}
-              className={`rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-200 ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-200 ${
                 isActive(l.href)
                   ? "bg-brand-50 text-brand-700"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
               {l.label}
+              {l.badge && (
+                <span className="rounded-full bg-fuchsia-100 px-1.5 py-px text-[10px] font-bold tracking-wide text-fuchsia-700">
+                  {l.badge}
+                </span>
+              )}
             </Link>
           ))}
           <Link
@@ -93,13 +105,18 @@ export default function Header() {
                   key={l.href}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className={`block rounded-xl px-3 py-2.5 text-sm font-medium ${
+                  className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium ${
                     isActive(l.href)
                       ? "bg-brand-50 text-brand-700"
                       : "text-slate-700 hover:bg-slate-100"
                   }`}
                 >
                   {l.label}
+                  {l.badge && (
+                    <span className="rounded-full bg-fuchsia-100 px-1.5 py-px text-[10px] font-bold tracking-wide text-fuchsia-700">
+                      {l.badge}
+                    </span>
+                  )}
                 </Link>
               ))}
               <Link
