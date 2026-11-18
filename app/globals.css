@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Brand: deep violet → indigo gradient family */
+  --color-brand-50: #f0f1fe;
+  --color-brand-100: #e1e4fd;
+  --color-brand-200: #c8cdfb;
+  --color-brand-300: #a5acf8;
+  --color-brand-400: #8185f3;
+  --color-brand-500: #6c5ce7;
+  --color-brand-600: #5b4bc4;
+  --color-brand-700: #4b3ea3;
+  --color-brand-800: #3f3584;
+  --color-brand-900: #353066;
+
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.6s ease-out both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #ddd6fe;
+  color: #2e1065;
+}
+
+:focus-visible {
+  outline: 2px solid #6c5ce7;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Thin, quiet scrollbars */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #c7c9e8;
+  border-radius: 8px;
+  border: 2px solid #f8fafc;
+}
+::-webkit-scrollbar-thumb:hover { background: #a5acf8; }
+
+/* Gradient headline text */
+.gradient-text {
+  background: linear-gradient(92deg, #6c5ce7 0%, #4f46e5 45%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft premium card */
+.card {
+  background: #fff;
+  border: 1px solid #e6e8f2;
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -16px rgba(76, 53, 196, 0.18);
+}
+
+/* Hero background: soft violet mesh */
+.hero-mesh {
+  background:
+    radial-gradient(42rem 26rem at 12% -10%, rgba(108, 92, 231, 0.22), transparent 60%),
+    radial-gradient(36rem 24rem at 92% 0%, rgba(14, 165, 233, 0.18), transparent 60%),
+    radial-gradient(30rem 20rem at 55% 110%, rgba(245, 158, 11, 0.10), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* Shimmering skeleton bar */
+.skeleton {
+  background: linear-gradient(90deg, #edeef7 25%, #f7f8fd 50%, #edeef7 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
