@@ -105,12 +105,12 @@ export default function TermsPage() {
               <h2 className="text-xl font-semibold text-slate-900">7. Contact</h2>
               <p className="mt-2">
                 Questions about these terms?{" "}
-                <Link href="/contact" className="font-semibold text-brand-600 hover:text-brand-700">
+                <Link href="/contact" className="font-semibold text-[#b42318] hover:underline">
                   Contact us
                 </Link>{" "}
                 or email{" "}
-                <a href="mailto:hello@assignmenthelper.example" className="font-semibold text-brand-600 hover:text-brand-700">
-                  hello@assignmenthelper.example
+                <a href="mailto:dipeshkarki8292@gmail.com" className="font-semibold text-[#b42318] hover:underline">
+                  dipeshkarki8292@gmail.com
                 </a>
                 .
               </p>

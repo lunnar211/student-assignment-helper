@@ -109,12 +109,12 @@ export default function PrivacyPage() {
               <h2 className="text-xl font-semibold text-slate-900">Contact</h2>
               <p className="mt-2">
                 If you have any questions about this policy,{" "}
-                <Link href="/contact" className="font-semibold text-brand-600 hover:text-brand-700">
+                <Link href="/contact" className="font-semibold text-[#b42318] hover:underline">
                   contact us
                 </Link>{" "}
                 or email us at{" "}
-                <a href="mailto:hello@assignmenthelper.example" className="font-semibold text-brand-600 hover:text-brand-700">
-                  hello@assignmenthelper.example
+                <a href="mailto:dipeshkarki8292@gmail.com" className="font-semibold text-[#b42318] hover:underline">
+                  dipeshkarki8292@gmail.com
                 </a>
                 .
               </p>

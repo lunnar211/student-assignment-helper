@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, AI_RATE_LIMIT } from "@/lib/rate-limit";
 import { generateText } from "@/lib/ai";
 import { wordCount } from "@/lib/text";
 
@@ -51,6 +52,8 @@ function buildTemplateDraft(fields: {
 }
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, AI_RATE_LIMIT.limit, AI_RATE_LIMIT.windowMs);
+  if (limited) return limited;
   let body: unknown;
   try {
     body = await req.json();
@@ -66,6 +69,7 @@ export async function POST(req: Request) {
     goals,
     achievements = "",
     extra = "",
+    lengthTarget = "about 500 words",
   } = body as {
     fullName?: unknown;
     program?: unknown;
@@ -74,6 +78,7 @@ export async function POST(req: Request) {
     goals?: unknown;
     achievements?: unknown;
     extra?: unknown;
+    lengthTarget?: unknown;
   };
 
   const required: [string, unknown][] = [
@@ -121,8 +126,9 @@ export async function POST(req: Request) {
     extra: extra as string,
   };
 
+  const targetWords = typeof lengthTarget === "string" && lengthTarget.trim() ? lengthTarget.trim() : "about 500 words";
   const prompt =
-    `Write a complete Statement of Purpose (550–750 words) in the first person for the following applicant, using only the details given. Structure it with: introduction and motivation, academic background, relevant experience and achievements, why this programme at this university, career goals, and a closing paragraph.\n\n` +
+    `Write a complete Statement of Purpose (${targetWords}) in the first person for the following applicant, using only the details given. Structure it with: introduction and motivation, academic background, relevant experience and achievements, why this programme at this university, career goals, and a closing paragraph.\n\n` +
     `Full name: ${fields.fullName}\n` +
     `Programme: ${fields.program}\n` +
     `University: ${fields.university}\n` +

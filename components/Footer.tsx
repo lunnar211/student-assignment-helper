@@ -2,6 +2,7 @@ import Link from "next/link";
 import { GraduationCap, Heart } from "lucide-react";
 
 const TOOLS = [
+  { href: "/all-in-one", label: "All-in-One Fix" },
   { href: "/paraphraser", label: "AI Paraphraser" },
   { href: "/humanizer", label: "AI Humanizer" },
   { href: "/sop-writer", label: "SOP Writer" },
@@ -19,6 +20,7 @@ const LEARN = [
 
 const COMPANY = [
   { href: "/about", label: "About" },
+  { href: "/faq", label: "FAQ" },
   { href: "/contact", label: "Contact" },
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
@@ -26,16 +28,16 @@ const COMPANY = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-white">
+    <footer className="border-t-2 border-[#1c2b4a] bg-[#fffdf6]">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 via-indigo-600 to-sky-500 text-white shadow-lg shadow-brand-500/25">
+              <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[#1c2b4a] text-white">
                 <GraduationCap className="h-5 w-5" />
               </span>
-              <span className="text-[17px] font-bold tracking-tight text-slate-900">
-                Assignment <span className="gradient-text">Helper</span>
+              <span className="font-serif text-[17px] font-bold tracking-tight text-[#1c2b4a]">
+                Assignment Helper
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
@@ -63,7 +65,7 @@ export default function Footer() {
                   <li key={l.href}>
                     <Link
                       href={l.href}
-                      className="text-sm text-slate-500 transition-colors hover:text-brand-600"
+                      className="text-sm text-slate-500 transition-colors hover:text-[#b42318]"
                     >
                       {l.label}
                     </Link>

@@ -35,13 +35,19 @@ export const metadata: Metadata = {
     title: "Assignment Helper — Free AI Writing Tools for Students",
     description:
       "Paraphrase, humanize, write your SOP, check grammar and AI content — free, no login, all in one place.",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Assignment Helper — free writing tools for students" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Assignment Helper — Free AI Writing Tools for Students",
     description:
       "Paraphrase, humanize, write your SOP, check grammar and AI content — free, no login, all in one place.",
+    images: ["/og.png"],
   },
+};
+
+export const viewport = {
+  themeColor: "#1c2b4a",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -50,9 +56,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
+      <body className="min-h-full flex flex-col bg-[#fbf6e9] text-[#1c2b4a]">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-[#1c2b4a] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Skip to main content
+        </a>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">{children}</main>
         <Footer />
       </body>
     </html>

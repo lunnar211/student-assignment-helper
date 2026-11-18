@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
+import { rateLimit, LOCAL_RATE_LIMIT } from "@/lib/rate-limit";
 import { detectAI } from "@/lib/text";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, LOCAL_RATE_LIMIT.limit, LOCAL_RATE_LIMIT.windowMs);
+  if (limited) return limited;
   let body: unknown;
   try {
     body = await req.json();

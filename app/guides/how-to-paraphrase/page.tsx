@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Lightbulb, RefreshCw } from "lucide-react";
+import { ArrowRight, Lightbulb, RefreshCw } from "lucide-react";
 import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
@@ -12,21 +12,27 @@ export const metadata: Metadata = {
 export default function ParaphraseGuidePage() {
   return (
     <div className="hero-mesh">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({"@context": "https://schema.org", "@type": "Article", "headline": "How to paraphrase without plagiarising", "description": "A 5-step method, good vs bad examples, and what actually counts as plagiarism.", "datePublished": "2026-11-18", "author": {"@type": "Organization", "name": "Assignment Helper"}, "publisher": {"@type": "Organization", "name": "Assignment Helper"}}) }}
+      />
       <article className="mx-auto max-w-3xl px-4 pt-14 pb-20 sm:px-6 lg:px-8">
         <Reveal>
-          <Link
-            href="/guides"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700"
-          >
-            <ArrowLeft className="h-4 w-4" /> All guides
-          </Link>
-          <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-brand-700 shadow-sm ring-1 ring-brand-100">
+          <nav aria-label="Breadcrumb" className="text-sm text-slate-600">
+            <Link href="/" className="font-semibold text-[#b42318] hover:underline">Home</Link>
+            <span aria-hidden className="mx-2">›</span>
+            <Link href="/guides" className="font-semibold text-[#b42318] hover:underline">Guides</Link>
+            <span aria-hidden className="mx-2">›</span>
+            <span aria-current="page">How to paraphrase without plagiarising</span>
+          </nav>
+          <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-[#1c2b4a] ring-1 ring-[#1c2b4a]/30">
             <RefreshCw className="h-4 w-4" />
             Assignments · 7 min read
           </span>
           <h1 className="mt-5 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             How to paraphrase without plagiarising
           </h1>
+          <p className="mt-4 font-mono text-xs tracking-widest text-slate-500 uppercase">Published 18 November 2026 · Assignment Helper</p>
           <p className="mt-4 text-lg leading-relaxed text-slate-500">
             Paraphrasing is one of the most useful skills in academic writing —
             and one of the most misunderstood. It is not swapping a few words
@@ -198,11 +204,27 @@ export default function ParaphraseGuidePage() {
           </div>
         </Reveal>
 
+        <Reveal delay={0.1}>
+          <div className="card mt-10 p-6">
+            <h2 className="font-serif text-lg font-semibold text-[#1c2b4a]">Related tools</h2>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link href="/paraphraser" className="font-semibold text-[#b42318] hover:underline">Paraphraser</Link>
+                <span className="text-slate-600"> — Rewrite a passage in standard, formal, simple or academic tone.</span>
+              </li>
+              <li>
+                <Link href="/similarity-checker" className="font-semibold text-[#b42318] hover:underline">Similarity Checker</Link>
+                <span className="text-slate-600"> — Compare your rewrite with the original and see the overlap.</span>
+              </li>
+            </ul>
+          </div>
+        </Reveal>
+
         <Reveal delay={0.12}>
           <div className="mt-10 text-center">
             <Link
               href="/paraphraser"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-95"
+              className="inline-flex items-center gap-2 rounded-md bg-[#1c2b4a] px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#16233d] active:scale-95"
             >
               Try the paraphraser — free
               <ArrowRight className="h-4 w-4" />

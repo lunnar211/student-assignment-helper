@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, AI_RATE_LIMIT } from "@/lib/rate-limit";
 import { sentences } from "@/lib/text";
 
 export const maxDuration = 60;
@@ -96,6 +97,8 @@ async function checkChunk(chunk: string, language: string): Promise<GrammarMatch
 }
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, AI_RATE_LIMIT.limit, AI_RATE_LIMIT.windowMs);
+  if (limited) return limited;
   let body: unknown;
   try {
     body = await req.json();

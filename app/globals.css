@@ -2,28 +2,36 @@
 
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", "Courier New", monospace;
+  --font-serif: Georgia, "Times New Roman", Times, serif;
 
-  /* Brand: deep violet → indigo gradient family */
-  --color-brand-50: #f0f1fe;
-  --color-brand-100: #e1e4fd;
-  --color-brand-200: #c8cdfb;
-  --color-brand-300: #a5acf8;
-  --color-brand-400: #8185f3;
-  --color-brand-500: #6c5ce7;
-  --color-brand-600: #5b4bc4;
-  --color-brand-700: #4b3ea3;
-  --color-brand-800: #3f3584;
-  --color-brand-900: #353066;
+  /* Paper, ink & red pen — a single ink-navy + red-pen palette.
+     The old violet brand scale is remapped to ink navy so legacy
+     brand-* classes keep working with the new character. */
+  --color-brand-50: #eef1f6;
+  --color-brand-100: #dbe2ec;
+  --color-brand-200: #b9c6d8;
+  --color-brand-300: #8ba0bd;
+  --color-brand-400: #5d789e;
+  --color-brand-500: #33497a;
+  --color-brand-600: #1c2b4a;
+  --color-brand-700: #16233d;
+  --color-brand-800: #111b30;
+  --color-brand-900: #0c1424;
 
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-accent-600: #d97706;
+  --color-ink: #1c2b4a;
+  --color-ink-soft: #3c4a68;
+  --color-paper: #fbf6e9;
+  --color-paper-deep: #f3ecd7;
+  --color-redpen: #b42318;
+  --color-redpen-soft: #fdecea;
+
+  --color-accent-400: #d92d20;
+  --color-accent-500: #b42318;
+  --color-accent-600: #912018;
 
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-fade-in: fade-in 0.6s ease-out both;
-  --animate-float: float 7s ease-in-out infinite;
-  --animate-shimmer: shimmer 2.4s linear infinite;
 
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(20px); }
@@ -33,14 +41,6 @@
     from { opacity: 0; }
     to { opacity: 1; }
   }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-  @keyframes shimmer {
-    from { background-position: 200% 0; }
-    to { background-position: -200% 0; }
-  }
 }
 
 html {
@@ -48,19 +48,19 @@ html {
 }
 
 body {
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: #fbf6e9;
+  color: #1c2b4a;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #ddd6fe;
-  color: #2e1065;
+  background: #f6d9d4;
+  color: #7a271a;
 }
 
 :focus-visible {
-  outline: 2px solid #6c5ce7;
+  outline: 2px solid #b42318;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -69,40 +69,86 @@ body {
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: #c7c9e8;
+  background: #c9c2a8;
   border-radius: 8px;
-  border: 2px solid #f8fafc;
+  border: 2px solid #fbf6e9;
 }
-::-webkit-scrollbar-thumb:hover { background: #a5acf8; }
+::-webkit-scrollbar-thumb:hover { background: #a8a184; }
 
-/* Gradient headline text */
-.gradient-text {
-  background: linear-gradient(92deg, #6c5ce7 0%, #4f46e5 45%, #0ea5e9 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Soft premium card */
+/* Warm paper card — flat, ink-ruled, no gradient shadow tint */
 .card {
-  background: #fff;
-  border: 1px solid #e6e8f2;
-  border-radius: 1.25rem;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 12px 32px -16px rgba(76, 53, 196, 0.18);
+  background: #fffdf6;
+  border: 1px solid #ddd5bd;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(28, 43, 74, 0.06);
 }
 
-/* Hero background: soft violet mesh */
-.hero-mesh {
-  background:
-    radial-gradient(42rem 26rem at 12% -10%, rgba(108, 92, 231, 0.22), transparent 60%),
-    radial-gradient(36rem 24rem at 92% 0%, rgba(14, 165, 233, 0.18), transparent 60%),
-    radial-gradient(30rem 20rem at 55% 110%, rgba(245, 158, 11, 0.10), transparent 60%),
-    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+/* Ruled paper: faint horizontal lines like a notebook page.
+   Hard-stop lines, not a colour wash. */
+.paper-ruled {
+  background-color: #fbf6e9;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    rgba(28, 43, 74, 0.07) 31px,
+    rgba(28, 43, 74, 0.07) 32px
+  );
+}
+.paper-plain {
+  background-color: #fbf6e9;
 }
 
-/* Shimmering skeleton bar */
+/* Red-pen underline for headings */
+.red-underline {
+  text-decoration: underline;
+  text-decoration-color: #b42318;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+
+/* Red-pen margin note */
+.margin-note {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  color: #b42318;
+}
+
+/* Plain skeleton bar (no shimmer gradient) */
 .skeleton {
-  background: linear-gradient(90deg, #edeef7 25%, #f7f8fd 50%, #edeef7 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.6s linear infinite;
+  background: #ece5cd;
+  animation: fade-in 0.6s ease-out both;
+}
+
+/* Legacy class names kept as no-ops so old markup never renders a gradient */
+.hero-mesh {
+  background-color: #fbf6e9;
+}
+.gradient-text {
+  color: #1c2b4a;
+}
+
+/* ---- Print: students print the text, not the chrome ---- */
+@media print {
+  header, footer, nav {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .card {
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  .no-print {
+    display: none !important;
+  }
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+  textarea {
+    border: 1px solid #999 !important;
+  }
 }

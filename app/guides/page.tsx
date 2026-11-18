@@ -17,6 +17,7 @@ const GUIDES = [
     description:
       "What a Statement of Purpose really is, the structure that works (hook, background, why this program, goals, closing), and the mistakes that get applications rejected.",
     read: "8 min read",
+    date: "18 November 2026",
     tag: "Applications",
   },
   {
@@ -26,6 +27,7 @@ const GUIDES = [
     description:
       "A 5-step paraphrasing method, what actually counts as plagiarism, good vs bad examples, and how the tools on this site fit in.",
     read: "7 min read",
+    date: "18 November 2026",
     tag: "Assignments",
   },
   {
@@ -35,6 +37,7 @@ const GUIDES = [
     description:
       "The 10 grammar mistakes students make most — with a quick fix and a real example for each one — and when to run the grammar checker.",
     read: "6 min read",
+    date: "18 November 2026",
     tag: "Writing skills",
   },
 ];
@@ -65,21 +68,21 @@ export default function GuidesPage() {
             <Reveal key={g.href} delay={0.07 * i}>
               <Link
                 href={g.href}
-                className="card group flex h-full flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-xl hover:shadow-brand-600/10"
+                className="card group flex h-full flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#1c2b4a]/50"
               >
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-600 to-indigo-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[#1c2b4a] text-white transition-transform duration-300 group-hover:scale-105">
                     <g.icon className="h-6 w-6" />
                   </span>
-                  <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 ring-1 ring-brand-100">
+                  <span className="rounded-full bg-[#eef1f6] px-3 py-1 text-xs font-semibold text-[#1c2b4a] ring-1 ring-[#1c2b4a]/20">
                     {g.tag}
                   </span>
                 </div>
                 <h2 className="mt-5 text-lg font-semibold text-slate-900">{g.title}</h2>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-500">{g.description}</p>
                 <span className="mt-5 flex items-center justify-between">
-                  <span className="text-xs font-semibold tracking-wide text-slate-400 uppercase">{g.read}</span>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 transition-all group-hover:gap-2.5">
+                  <span className="font-mono text-xs font-semibold tracking-wide text-slate-500 uppercase">{g.date} · {g.read}</span>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#b42318] transition-all group-hover:gap-2.5">
                     Read guide
                     <ArrowRight className="h-4 w-4" />
                   </span>

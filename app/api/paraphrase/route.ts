@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, AI_RATE_LIMIT } from "@/lib/rate-limit";
 import { generateTextChunked } from "@/lib/ai";
 import { wordCount } from "@/lib/text";
 
@@ -16,6 +17,8 @@ const TONE_GUIDANCE: Record<Tone, string> = {
 };
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, AI_RATE_LIMIT.limit, AI_RATE_LIMIT.windowMs);
+  if (limited) return limited;
   let body: unknown;
   try {
     body = await req.json();

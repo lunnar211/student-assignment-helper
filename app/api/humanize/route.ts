@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, AI_RATE_LIMIT } from "@/lib/rate-limit";
 import { generateText, processChunks } from "@/lib/ai";
 import { detectAI, scrubCliches, splitIntoChunks, wordCount } from "@/lib/text";
 
@@ -25,6 +26,8 @@ const FALLBACK_TEXT =
   "AI is temporarily unavailable right now. Please try again in a minute — your text was not changed.";
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, AI_RATE_LIMIT.limit, AI_RATE_LIMIT.windowMs);
+  if (limited) return limited;
   let body: unknown;
   try {
     body = await req.json();

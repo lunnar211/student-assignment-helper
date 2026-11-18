@@ -108,7 +108,7 @@ export default function AboutPage() {
           <div className="mt-10 text-center">
             <Link
               href="/paraphraser"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-600 to-indigo-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-95"
+              className="inline-flex items-center gap-2 rounded-md bg-[#1c2b4a] px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#16233d] active:scale-95"
             >
               Try the tools — free
               <ArrowRight className="h-4 w-4" />
