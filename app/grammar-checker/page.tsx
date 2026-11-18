@@ -6,7 +6,7 @@ import { CheckCircle2, Wrench } from "lucide-react";
 import { ErrorBanner, LoadingSkeleton, PrimaryButton, ResultCard, ToolShell } from "@/components/ToolShell";
 import WordStats from "@/components/WordStats";
 
-const MAX_CHARS = 5000;
+const MAX_CHARS = 30000;
 
 interface GrammarMatch {
   message: string;

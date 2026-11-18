@@ -220,3 +220,112 @@ export function similarity(a: string, b: string): SimilarityResult {
     },
   };
 }
+
+/* ---------------- Chunking (long texts) ---------------- */
+
+/** Split text into chunks of at most `maxWords` words, on paragraph/sentence boundaries. */
+export function splitIntoChunks(text: string, maxWords = 700): string[] {
+  const paragraphs = text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  if (paragraphs.length === 0) return [text];
+  const chunks: string[] = [];
+  let current = "";
+  let currentWords = 0;
+
+  const pushCurrent = () => {
+    if (current.trim()) chunks.push(current.trim());
+    current = "";
+    currentWords = 0;
+  };
+
+  for (const para of paragraphs) {
+    const paraWords = wordCount(para);
+    if (currentWords + paraWords <= maxWords) {
+      current = current ? `${current}\n\n${para}` : para;
+      currentWords += paraWords;
+      continue;
+    }
+    if (paraWords > maxWords) {
+      pushCurrent();
+      let sentBuf = "";
+      let sentWords = 0;
+      for (const s of sentences(para)) {
+        const w = wordCount(s);
+        if (sentWords + w > maxWords && sentBuf) {
+          chunks.push(sentBuf.trim());
+          sentBuf = "";
+          sentWords = 0;
+        }
+        sentBuf = sentBuf ? `${sentBuf} ${s}` : s;
+        sentWords += w;
+      }
+      if (sentBuf.trim()) chunks.push(sentBuf.trim());
+      continue;
+    }
+    pushCurrent();
+    current = para;
+    currentWords = paraWords;
+  }
+  pushCurrent();
+  return chunks.length ? chunks : [text];
+}
+
+/** Split text into chunks of at most `maxChars` characters, on sentence boundaries. */
+export function splitIntoCharChunks(text: string, maxChars = 4500): string[] {
+  const sents = sentences(text);
+  if (sents.length === 0) return [text];
+  const chunks: string[] = [];
+  let cur = "";
+  for (const s of sents) {
+    if (cur && cur.length + s.length + 1 > maxChars) {
+      chunks.push(cur);
+      cur = "";
+    }
+    cur = cur ? `${cur} ${s}` : s;
+  }
+  if (cur) chunks.push(cur);
+  return chunks.length ? chunks : [text];
+}
+
+/* ---------------- AI-cliché scrub (deterministic) ---------------- */
+
+const CLICHE_REPLACEMENTS: [RegExp, string][] = [
+  [/\bin today's fast-paced world\b/gi, "these days"],
+  [/\bin today'?s world\b/gi, "these days"],
+  [/\bit is important to note that\b/gi, ""],
+  [/\bit is important to note\b/gi, ""],
+  [/\bit is worth noting that\b/gi, ""],
+  [/\bit is worth noting\b/gi, ""],
+  [/\bin conclusion\b/gi, ""],
+  [/\bin summary\b/gi, ""],
+  [/\bmoreover\b/gi, "Also"],
+  [/\bfurthermore\b/gi, "Also"],
+  [/\badditionally\b/gi, "Also"],
+  [/\bdelve into\b/gi, "look at"],
+  [/\bdelve\b/gi, "look at"],
+  [/\butilize\b/gi, "use"],
+  [/\butilised\b/gi, "used"],
+  [/\butilized\b/gi, "used"],
+  [/\bleverage\b/gi, "use"],
+  [/\bin essence\b/gi, ""],
+  [/\ba testament to\b/gi, "proof of"],
+  [/\bplays a crucial role\b/gi, "matters a lot"],
+  [/\bplay a crucial role\b/gi, "matter a lot"],
+  [/\bit is essential to\b/gi, "you need to"],
+  [/\bshed light on\b/gi, "explain"],
+  [/\bembark on\b/gi, "start"],
+  [/\bnavigate the complexities of\b/gi, "deal with"],
+  [/\bin the realm of\b/gi, "in"],
+];
+
+/** Deterministically strip stock AI phrases. Never changes facts — only wording. */
+export function scrubCliches(text: string): string {
+  let out = text;
+  for (const [re, rep] of CLICHE_REPLACEMENTS) out = out.replace(re, rep);
+  // Clean up commas left behind by removed phrases ("In conclusion, X" -> "X").
+  out = out.replace(/(^|[.!?]\s+),\s*/g, "$1");
+  out = out.replace(/,\s*,/g, ",");
+  out = out.replace(/ {2,}/g, " ");
+  out = out.replace(/\s+([,.!?;:])/g, "$1");
+  out = out.replace(/\n{3,}/g, "\n\n");
+  return out.trim();
+}

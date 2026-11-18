@@ -6,7 +6,7 @@ import { Scale } from "lucide-react";
 import { ErrorBanner, LoadingSkeleton, PrimaryButton, ToolShell } from "@/components/ToolShell";
 import WordStats from "@/components/WordStats";
 
-const MAX_CHARS = 5000;
+const MAX_CHARS = 30000;
 
 interface SimilarityResponse {
   similarity: number;

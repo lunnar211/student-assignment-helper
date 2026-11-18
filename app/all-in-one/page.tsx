@@ -31,7 +31,7 @@ import WordStats from "@/components/WordStats";
 import type { DetectResult, SimilarityResult } from "@/lib/text";
 import { wordCount } from "@/lib/text";
 
-const MAX_CHARS = 5000;
+const MAX_CHARS = 30000;
 const MIN_CHARS = 30;
 const MAX_FILE_MB = 10;
 
@@ -93,18 +93,28 @@ async function postJson(
   url: string,
   body: unknown,
 ): Promise<{ ok: boolean; data: Record<string, unknown> }> {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  let data: Record<string, unknown> = {};
-  try {
-    data = (await res.json()) as Record<string, unknown>;
-  } catch {
-    // Keep empty data on a bad response.
+  // One retry on network errors / 5xx (the AI backends are flaky). A 400 is a
+  // real validation error — retrying it would fail the same way.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      let data: Record<string, unknown> = {};
+      try {
+        data = (await res.json()) as Record<string, unknown>;
+      } catch {
+        // Keep empty data on a bad response.
+      }
+      if (res.ok || res.status === 400) return { ok: res.ok, data };
+    } catch {
+      // Network error — retry once below.
+    }
+    if (attempt === 0) await new Promise((r) => setTimeout(r, 1500));
   }
-  return { ok: res.ok, data };
+  return { ok: false, data: { error: "network error" } };
 }
 
 function fixesFromMatches(
@@ -218,7 +228,7 @@ export default function AllInOnePage() {
     setError("");
     setFileNote(
       `${note}${pages ? ` ${pages} page${pages === 1 ? "" : "s"}.` : ""}${
-        truncated ? ` Only the first ${MAX_CHARS.toLocaleString()} characters were kept (the tools accept up to 5,000 characters).` : ""
+        truncated ? ` Only the first ${MAX_CHARS.toLocaleString()} characters were kept (the tools accept up to 30,000 characters).` : ""
       }`,
     );
   };
@@ -315,9 +325,21 @@ export default function AllInOnePage() {
         (hum.data.result as string).trim().length > 0
       ) {
         humanized = hum.data.result as string;
-        updateStep(3, "done", `${wordCount(humanized)} words, natural rhythm`);
+        const aiScore =
+          typeof hum.data.aiScore === "number" ? (hum.data.aiScore as number) : null;
+        const passes =
+          typeof hum.data.passes === "number" ? (hum.data.passes as number) : 1;
+        updateStep(
+          3,
+          "done",
+          aiScore !== null
+            ? `${wordCount(humanized)} words, natural rhythm · AI score now ${aiScore}% after ${passes} pass${passes === 1 ? "" : "es"}`
+            : `${wordCount(humanized)} words, natural rhythm`,
+        );
       } else {
-        updateStep(3, "failed", "couldn't run this step");
+        // Humanize failed — the pipeline still continues with the paraphrased
+        // text (or the original), so the later steps can still run.
+        updateStep(3, "failed", "couldn't run this step — using the paraphrased text instead");
       }
 
       // Step 5: grammar-check the final text and auto-apply every correction.

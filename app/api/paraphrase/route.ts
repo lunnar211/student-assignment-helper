@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { generateText } from "@/lib/ai";
+import { generateTextChunked } from "@/lib/ai";
 import { wordCount } from "@/lib/text";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
+
+export const MAX_PARAPHRASE_CHARS = 30000;
 
 type Tone = "standard" | "formal" | "simple" | "academic";
 
@@ -29,9 +31,9 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  if (text.length > 5000) {
+  if (text.length > MAX_PARAPHRASE_CHARS) {
     return NextResponse.json(
-      { error: "Text must be at most 5000 characters long." },
+      { error: `Text must be at most ${MAX_PARAPHRASE_CHARS.toLocaleString()} characters long.` },
       { status: 400 },
     );
   }
@@ -42,10 +44,12 @@ export async function POST(req: Request) {
     );
   }
 
-  const prompt =
-    `Rewrite the following text in ${TONE_GUIDANCE[tone as Tone]}, keeping the same meaning and approximately the same length. Output only the rewritten text.\n\n${text}`;
+  const { text: result, provider, failedChunks, chunkCount } = await generateTextChunked(
+    (chunk) =>
+      `Rewrite the following text in ${TONE_GUIDANCE[tone as Tone]}, keeping the same meaning and approximately the same length. Do not shorten or summarize it. Output only the rewritten text.\n\n${chunk}`,
+    text,
+    { maxTokens: 3000, concurrency: 3 },
+  );
 
-  const { text: result, provider } = await generateText(prompt);
-
-  return NextResponse.json({ result, provider, words: wordCount(result) });
+  return NextResponse.json({ result, provider, words: wordCount(result), failedChunks, chunkCount });
 }

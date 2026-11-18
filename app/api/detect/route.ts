@@ -19,9 +19,9 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  if (text.length > 5000) {
+  if (text.length > 30000) {
     return NextResponse.json(
-      { error: "Text must be at most 5000 characters long." },
+      { error: "Text must be at most 30,000 characters long." },
       { status: 400 },
     );
   }

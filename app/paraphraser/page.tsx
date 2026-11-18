@@ -5,7 +5,7 @@ import { RefreshCw, Sparkles } from "lucide-react";
 import { ErrorBanner, LoadingSkeleton, PrimaryButton, ResultCard, ToolShell } from "@/components/ToolShell";
 import WordStats from "@/components/WordStats";
 
-const MAX_CHARS = 5000;
+const MAX_CHARS = 30000;
 
 type Tone = "Standard" | "Formal" | "Simple" | "Academic";
 const TONES: Tone[] = ["Standard", "Formal", "Simple", "Academic"];
