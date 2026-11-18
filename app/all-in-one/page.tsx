@@ -117,6 +117,22 @@ async function postJson(
   return { ok: false, data: { error: "network error" } };
 }
 
+/**
+ * AI steps (paraphrase / humanize) run on a free backend that rate-limits
+ * under bursts. If a call comes back with the "fallback" answer, wait 10
+ * seconds (lets the rate-limit window pass) and try once more. The page can
+ * wait — unlike the server route, it has no 60-second limit.
+ */
+async function postAiWithRetry(
+  url: string,
+  body: unknown,
+): Promise<{ ok: boolean; data: Record<string, unknown> }> {
+  const first = await postJson(url, body);
+  if (first.ok && first.data.provider !== "fallback") return first;
+  await new Promise((r) => setTimeout(r, 10000));
+  return postJson(url, body);
+}
+
 function fixesFromMatches(
   matches: GrammarMatch[],
   base: string,
@@ -301,7 +317,7 @@ export default function AllInOnePage() {
 
       // Step 3: paraphrase (sequential — step 4 depends on it).
       updateStep(2, "running");
-      const para = await postJson("/api/paraphrase", { text: original, tone: "standard" });
+      const para = await postAiWithRetry("/api/paraphrase", { text: original, tone: "standard" });
       if (
         para.ok &&
         para.data.provider !== "fallback" &&
@@ -317,7 +333,7 @@ export default function AllInOnePage() {
       // Step 4: humanize the paraphrased text (or the original if paraphrase failed).
       updateStep(3, "running");
       const humanizeInput = paraphrased ?? original;
-      const hum = await postJson("/api/humanize", { text: humanizeInput });
+      const hum = await postAiWithRetry("/api/humanize", { text: humanizeInput });
       if (
         hum.ok &&
         hum.data.provider !== "fallback" &&
