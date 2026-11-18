@@ -6,27 +6,19 @@ export const maxDuration = 60;
 
 export const MAX_HUMANIZE_CHARS = 30000;
 
-const HUMANIZE_PROMPT_V1 = `Rewrite this text so it sounds like a real student wrote it by hand — natural, a bit uneven, and human. Rules you MUST follow:
-- Mix very short sentences (3-7 words) with longer ones (15-25 words). Never keep the same sentence length twice in a row.
-- Use contractions: don't, can't, it's, that's, we're, you'll.
-- Use plain everyday words, not fancy ones.
-- NEVER use these words or phrases: moreover, furthermore, additionally, in conclusion, in summary, it is important to note, it is worth noting, delve, crucial, pivotal, landscape, tapestry, leverage, utilize, in essence, a testament to, plays a crucial role, it is essential to, shed light on, embark on, in today's fast-paced world, in the realm of.
-- Start some sentences with And, But or So when it sounds natural.
-- Keep every fact, number, name and date EXACTLY the same. Do not add new facts. Do not drop any point.
-- Do NOT shorten or summarize — keep about the same length as the original.
-- Output only the rewritten text, no explanation.
+const HUMANIZE_PROMPT_V1 = `Rebuild every sentence from scratch. Do NOT keep any sentence the same — change the words AND the sentence structure of each one. Break long sentences into two short ones. Start sentences in different ways. Mix very short sentences (3-7 words) with longer ones. Use contractions (don't, can't, it's). Use simple everyday words. Write like a student telling a friend. Keep every fact, number, name and date the same, and keep all the points — do not cut anything out. Never use: moreover, furthermore, additionally, in conclusion, delve, crucial, pivotal, leverage, utilize, in essence, it is important to note. Give only the rewritten text.
 
-Text to rewrite:
+Text:
 `;
 
-const HUMANIZE_PROMPT_V2 = `Rewrite this text AGAIN, even more casual and human — like you are explaining it to a friend over tea. Break up every long sentence. Throw in a short fragment for emphasis now and then. Use the simplest words you can. Keep the meaning, facts, numbers, names and dates exactly the same, and keep about the same length. Never use: moreover, furthermore, additionally, in conclusion, delve, crucial, pivotal, leverage, utilize, in essence, it is important to note. Output only the rewritten text.
+const HUMANIZE_PROMPT_V2 = `Rewrite this text again, even more casual — like you're explaining it to a friend over tea. Rebuild every sentence with different words and a different structure. Throw in a short fragment for emphasis. Use contractions. Keep all facts the same and don't cut anything out. Never use moreover, furthermore, delve, in conclusion, crucial. Give only the rewritten text.
 
-Text to rewrite:
+Text:
 `;
 
-const HUMANIZE_PROMPT_V3 = `Rewrite this text in the simplest plain English a school student would use. Very short sentences mixed with medium ones. Everyday words only — if a word sounds like a textbook, swap it for a simpler one. Keep every fact, number, name and date exactly the same, and keep about the same length. Never use: moreover, furthermore, additionally, in conclusion, delve, crucial, pivotal, leverage, utilize, in essence, it is important to note. Output only the rewritten text.
+const HUMANIZE_PROMPT_V3 = `Rewrite this in the simplest plain English. Very short sentences mixed with medium ones. Rebuild every sentence with different, everyday words. Keep all facts the same and don't cut anything out. Give only the rewritten text.
 
-Text to rewrite:
+Text:
 `;
 
 const FALLBACK_TEXT =
@@ -62,7 +54,7 @@ export async function POST(req: Request) {
   const pass1 = await processChunks(chunks, (chunk) => `${HUMANIZE_PROMPT_V1}${chunk}`, {
     maxTokens: 3000,
     temperature: 0.85,
-    concurrency: 3,
+    concurrency: 2,
   });
 
   if (pass1.every((r) => !r.ok)) {
@@ -96,7 +88,7 @@ export async function POST(req: Request) {
     const rerun = await processChunks(
       targets.map((t) => t.part),
       (chunk) => `${prompt}${chunk}`,
-      { maxTokens: 3000, temperature: 0.9, concurrency: 3 },
+      { maxTokens: 3000, temperature: 0.9, concurrency: 2 },
     );
     const replacement = new Map<string, string>();
     targets.forEach((t, i) => {

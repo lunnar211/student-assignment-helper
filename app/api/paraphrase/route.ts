@@ -46,9 +46,9 @@ export async function POST(req: Request) {
 
   const { text: result, provider, failedChunks, chunkCount } = await generateTextChunked(
     (chunk) =>
-      `Rewrite the following text in ${TONE_GUIDANCE[tone as Tone]}, keeping the same meaning and approximately the same length. Do not shorten or summarize it. Output only the rewritten text.\n\n${chunk}`,
+      `Rewrite the following text in ${TONE_GUIDANCE[tone as Tone]}. Rebuild each sentence with different words and a different structure — do not keep sentences as they are. Keep the same meaning, facts and approximately the same length. Do not shorten or summarize it. Output only the rewritten text.\n\n${chunk}`,
     text,
-    { maxTokens: 3000, concurrency: 3 },
+    { maxTokens: 3000, concurrency: 2 },
   );
 
   return NextResponse.json({ result, provider, words: wordCount(result), failedChunks, chunkCount });

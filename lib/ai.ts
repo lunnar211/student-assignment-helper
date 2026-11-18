@@ -86,7 +86,9 @@ async function tryPollinations(prompt: string, temperature: number): Promise<str
     {},
     { model: "openai-fast", seed: Math.floor(Math.random() * 1_000_000_000) },
     { model: "gpt-oss", seed: Math.floor(Math.random() * 1_000_000_000) },
+    { model: "openai-fast", seed: Math.floor(Math.random() * 1_000_000_000) },
   ];
+  const backoffs = [2000, 5000, 10000];
 
   for (let i = 0; i < attempts.length; i++) {
     try {
@@ -111,7 +113,7 @@ async function tryPollinations(prompt: string, temperature: number): Promise<str
     } catch {
       // Next attempt.
     }
-    if (i < attempts.length - 1) await sleep(i === 0 ? 2000 : 5000);
+    if (i < attempts.length - 1) await sleep(backoffs[i] ?? 5000);
   }
   return null;
 }
@@ -154,7 +156,7 @@ export async function processChunks(
   buildPrompt: (chunk: string) => string,
   opts: GenerateOptions & { concurrency?: number } = {},
 ): Promise<ChunkResult[]> {
-  const concurrency = Math.max(1, Math.min(4, opts.concurrency ?? 3));
+  const concurrency = Math.max(1, Math.min(4, opts.concurrency ?? 2));
   const results: ChunkResult[] = new Array(chunks.length);
   let next = 0;
 
